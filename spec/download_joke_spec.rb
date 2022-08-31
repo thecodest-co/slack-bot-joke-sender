@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe DownloadJoke do
-  subject { described_class.call }
+  subject(:context) { described_class.call }
 
   let(:response) { double(:response, code: code, body: body)}
   let(:body) do
@@ -27,34 +27,14 @@ RSpec.describe DownloadJoke do
     let(:code) { 200 }
     let(:error) { false }
 
-    context 'when returns a single-line joke' do
-      let(:type) { 'single' }
-      let(:joke) { 'An example of a single-line joke' }
-
-      it 'makes GET request to an extenal service' do
-        expect(HTTParty).to receive(:get).with(DownloadJoke::JOKES_API_URL).once
-        subject
-      end
-
-      it 'returns a single-line joke' do
-        expect(subject).to eq(joke)
-      end
+    it "succeeds" do
+      expect(context).to be_a_success
     end
 
-    context 'when returns a two-line joke' do
-      let(:type) { 'twopart' }
-      let(:setup) { 'First line of a joke' }
-      let(:delivery) { 'Second line of a joke' }
-      let(:expected_result) { setup + "\n" + delivery }
+    let(:expected_body) { JSON.parse(response.body) }
 
-      it 'makes GET request to an extenal service' do
-        expect(HTTParty).to receive(:get).with(DownloadJoke::JOKES_API_URL).once
-        subject
-      end
-
-      it 'returns a single-line joke' do
-        expect(subject).to eq(expected_result)
-      end
+    it "provides the body" do
+      expect(context.body).to eq(expected_body)
     end
   end
 
@@ -62,8 +42,12 @@ RSpec.describe DownloadJoke do
     let(:code) { 200 }
     let(:error) { true }
   
-    it 'returns nil' do
-      expect(subject).to eq(nil)
+    it 'fails' do
+      expect(context).to be_a_failure
+    end
+
+    it "provides a failure message" do
+      expect(context.error).not_to be_nil
     end
   end
 
@@ -71,8 +55,12 @@ RSpec.describe DownloadJoke do
     let(:code) { 404 }
     let(:error) { false }
   
-    it 'returns nil' do
-      expect(subject).to eq(nil)
+    it 'fails' do
+      expect(context).to be_a_failure
+    end
+
+    it "provides a failure message" do
+      expect(context.error).not_to be_nil
     end
   end
 end

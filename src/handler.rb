@@ -6,7 +6,7 @@ def event_handler(event:, context:)
   event = JSON.parse(event['body'])
 
   if event['type'] == 'app_mention' && event['channel'] == ENV['RANDOM_CHANNEL_ID']
-    SendJoke.new(event['ts']).call
+    SendJoke.new(ts: event['ts']).call
   end
   { statusCode: 200 }
 end

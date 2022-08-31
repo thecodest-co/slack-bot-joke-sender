@@ -32,7 +32,7 @@ RSpec.describe 'event_handler' do
   let(:ts) { '123.456' }
 
   before do
-    allow(SendJoke).to receive(:new).and_return(send_joke_instance)
+    allow(SendJoke).to receive(:new).with(ts: ts).and_return(send_joke_instance)
     allow(send_joke_instance).to receive(:call).and_return('response')
   end
 
