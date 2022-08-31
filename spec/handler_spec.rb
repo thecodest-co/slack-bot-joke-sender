@@ -3,15 +3,14 @@ require 'spec_helper'
 RSpec.describe 'send_joke' do
   subject { send_joke(event: nil, context: nil) }
 
-  let(:send_joke_instance) { instance_double(SendJoke) }
+  let(:send_joke_result) { double(success?: true) }
 
   before do
-    allow(SendJoke).to receive(:new).and_return(send_joke_instance)
-    allow(send_joke_instance).to receive(:call).and_return('response')
+    allow(SendJoke).to receive(:call).and_return(send_joke_result)
   end
 
   it 'invokes a SendJoke service' do
-    expect(send_joke_instance).to receive(:call).once
+    expect(SendJoke).to receive(:call).once
     subject
   end
 end
@@ -19,7 +18,7 @@ end
 RSpec.describe 'event_handler' do
   subject { event_handler(event: event, context: nil) }
 
-  let(:send_joke_instance) { instance_double(SendJoke) }
+  let(:send_joke_result) { double(success?: true) }
   let(:event) { { 'body' => body } }
   let(:body) do
     {
@@ -32,8 +31,7 @@ RSpec.describe 'event_handler' do
   let(:ts) { '123.456' }
 
   before do
-    allow(SendJoke).to receive(:new).with(ts: ts).and_return(send_joke_instance)
-    allow(send_joke_instance).to receive(:call).and_return('response')
+    allow(SendJoke).to receive(:call).and_return(send_joke_result)
   end
 
   context 'when the event is app_mention' do
@@ -43,7 +41,7 @@ RSpec.describe 'event_handler' do
       let(:channel) { ENV['RANDOM_CHANNEL_ID'] }
       
       it 'invokes a SendJoke service' do
-        expect(send_joke_instance).to receive(:call).once
+        expect(SendJoke).to receive(:call).once
         subject
       end
 
@@ -56,7 +54,7 @@ RSpec.describe 'event_handler' do
       let(:channel) { 'other_channel_id' }
       
       it 'does not invoke a SendJoke service' do
-        expect(send_joke_instance).not_to receive(:call)
+        expect(SendJoke).not_to receive(:call)
         subject
       end
 
@@ -73,7 +71,7 @@ RSpec.describe 'event_handler' do
       let(:channel) { ENV['RANDOM_CHANNEL_ID'] }
       
       it 'does not invoke a SendJoke service' do
-        expect(send_joke_instance).not_to receive(:call)
+        expect(SendJoke).not_to receive(:call)
         subject
       end
 
@@ -86,7 +84,7 @@ RSpec.describe 'event_handler' do
       let(:channel) { 'other_channel_id' }
       
       it 'does not invoke a SendJoke service' do
-        expect(send_joke_instance).not_to receive(:call)
+        expect(SendJoke).not_to receive(:call)
         subject
       end
 
