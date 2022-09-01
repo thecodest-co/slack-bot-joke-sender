@@ -13,6 +13,14 @@ plugins:
   - serverless-offline
   - serverless-ruby-layer
 
+custom:
+  rubyLayer:
+    use_docker: true
+
+provider:
+  name: aws
+  runtime: ruby2.7
+
 functions:
   app-mention-handler:
     handler: src/handler.event_handler
