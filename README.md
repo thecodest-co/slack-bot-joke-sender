@@ -7,6 +7,8 @@ The app sends a joke downloaded from external API every Monday, Wednesday and Fr
 ### How to run locally
 instal serverless framework: `npm install -g serverless`
 
+install gems: `bundle install`
+
 install packages: `npm install`
 
 run app: `sls offline`
