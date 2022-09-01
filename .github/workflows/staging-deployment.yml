@@ -15,11 +15,6 @@ jobs:
       matrix:
         node-version: [ 14.x ]
     steps:
-      - uses: docker-practice/actions-setup-docker@master
-      - run: |
-          set -x
-          docker version
-          docker run --rm app
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -27,6 +22,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm install
+      - name: Set up Ruby 2.7
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - name: Install bundler
+        run: | 
+          gem install bundler
+          bundle -v
       - name: serverless deploy
         uses: serverless/github-action@v3
         with:

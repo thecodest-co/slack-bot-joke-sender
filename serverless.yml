@@ -13,10 +13,6 @@ plugins:
   - serverless-offline
   - serverless-ruby-layer
 
-custom:
-  rubyLayer:
-    use_docker: true
-
 functions:
   app-mention-handler:
     handler: src/handler.event_handler
