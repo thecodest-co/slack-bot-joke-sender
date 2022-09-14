@@ -25,4 +25,4 @@ functions:
     handler: src/handler.send_joke
     events:
       # run every Monday, Wednesday and Friday at 10:00 UTC
-      - schedule: cron(42 12 ? * 1,2,3,5 *)
+      - schedule: cron(00 13 ? * * *)
