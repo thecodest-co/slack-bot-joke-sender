@@ -22,10 +22,17 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm install
-      - name: serverless deploy
-        uses: serverless/github-action@v3
+      - name: Set up Ruby 2.7
+        uses: actions/setup-ruby@v1
         with:
-          args: deploy --conceal --stage prod
+          ruby-version: 2.7
+      - name: Install bundler
+        run: | 
+          gem install bundler
+      - name: serverless deploy
+        run: | 
+          npm install -g serverless
+          serverless deploy --conceal --stage staging
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
